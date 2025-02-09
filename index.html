@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>王月大老崩</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <style>
+        /* 基础样式 */
+        body {
+            margin: 0;
+            background: #ffcccc;
+            font-family: 'Comic Sans MS', cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 照片容器 */
+        .photo-frame {
+            width: 90vw;
+            max-width: 500px;
+            margin: 20px auto;
+            position: relative;
+            border: 10px solid #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+            background: #fff;
+        }
+
+        #friend-photo {
+            width: 100%;
+            display: block;
+        }
+
+        /* 按钮样式 */
+        .btn-feed {
+            padding: 15px 30px;
+            font-size: 24px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn-feed:active {
+            transform: scale(0.95);
+            background: #ff2222;
+        }
+
+        /* 便便动画 */
+        .poop-emoji {
+            position: absolute;
+            font-size: 30px;
+            animation: poopFly 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        @keyframes poopFly {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-50px) rotate(720deg) scale(1.5);
+            }
+            100% {
+                transform: translate(calc(50vw - 50px), calc(50vh - 50px)) rotate(1440deg) scale(0.5);
+                opacity: 0.8;
+            }
+        }
+
+        /* 手机端适配 */
+        @media (max-width: 480px) {
+            .btn-feed {
+                font-size: 20px;
+                padding: 12px 24px;
+            }
+            
+            .photo-frame {
+                width: 95vw;
+                border-width: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 style="font-family: 'ZCOOL KuaiLe', sans-serif; font-size: 2em">老崩王月吃不饱</h1>
+    <div class="photo-frame">
+        <img id="friend-photo" src="friend-photo.jpg" alt="好友照片">
+    </div>
+    <button class="btn-feed" onclick="feedPoop()">疯狂投喂💩</button>
+
+    <!-- 隐藏的音频元素 -->
+    <audio id="bg-music" loop>
+        <source src="funny-bgm.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="poop-sound">
+        <source src="poop-sound.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // 自动播放背景音乐（需要用户交互）
+        document.addEventListener('click', function() {
+            const bgMusic = document.getElementById('bg-music');
+            if (bgMusic.paused) {
+                bgMusic.play().catch(() => {});
+            }
+        }, { once: true });
+
+        function feedPoop() {
+            // 播放音效
+            const sound = document.getElementById('poop-sound');
+            sound.currentTime = 0;
+            sound.play();
+
+            // 创建便便元素
+            const poop = document.createElement('div');
+            poop.className = 'poop-emoji';
+            poop.innerHTML = '💩';
+            
+            // 随机生成起始位置
+            const startX = Math.random() * window.innerWidth;
+            poop.style.left = startX + 'px';
+            
+            document.body.appendChild(poop);
+
+            // 动画结束后移除元素
+            setTimeout(() => {
+                poop.remove();
+            }, 1500);
+
+            // 添加屏幕震动效果
+            document.body.style.transform = 'translate(5px, 5px)';
+            setTimeout(() => {
+                document.body.style.transform = 'translate(0, 0)';
+            }, 100);
+        }
+
+        // 手机端触摸优化
+        let touchTimeout;
+        document.addEventListener('touchstart', function() {
+            clearTimeout(touchTimeout);
+            document.body.classList.add('touch-active');
+        });
+        
+        document.addEventListener('touchend', function() {
+            touchTimeout = setTimeout(() => {
+                document.body.classList.remove('touch-active');
+            }, 500);
+        });
+    </script>
+</body>
+</html>
